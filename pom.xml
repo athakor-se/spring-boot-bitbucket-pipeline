@@ -49,6 +49,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>spring-boot-pipeline-demo</finalName>
 	</build>
 
 	<profiles>
