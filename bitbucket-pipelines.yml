@@ -1,15 +1,16 @@
+image: maven:3.8.2-jdk-11
+
 definitions:
   steps:
-    - step: &build-app
+    - step: &build-s3-app
         name: "Build application"
-        image: maven:3.8.2-jdk-11
         caches:
           - maven
         script:
           - mvn clean install
         artifacts:
-          - target/**
-    - step: &deploy-app
+          - target/spring-boot-pipeline-demo.jar
+    - step: &deploy-s3-app
         name: Deploy Application to AWS S3
         script:
           - pipe: atlassian/aws-s3-deploy:1.1.0
@@ -18,6 +19,7 @@ definitions:
               AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
               AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
               S3_BUCKET: $S3_BUCKET
+              ACL: 'public-read'
               LOCAL_PATH: "target"
 
 
@@ -25,21 +27,20 @@ pipelines:
   default:
     - step:
         name: "Run unit tests"
-        image: maven:3.8.2-jdk-11
         caches:
           - maven
         script:
           - mvn test
   custom:
     Deploy to Live:
+      - step: 
+          *build-s3-app
       - step:
-          *build-app
-      - step:
-          <<: *deploy-app
+          <<: *deploy-s3-app
           deployment: live
     Deplot to Stage:
+      - step: 
+          *build-s3-app
       - step:
-          *build-app
-      - step:
-          <<: *deploy-app
+          <<: *deploy-s3-app
           deployment: stage
