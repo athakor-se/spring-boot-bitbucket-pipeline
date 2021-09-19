@@ -10,27 +10,15 @@ definitions:
         artifacts:
           - target/**
     - step: &deploy-app
-        name: Deploy Live Application to AWS S3
-          deployment: live
-          script:
-            - pipe: atlassian/aws-s3-deploy:1.1.0
-              variables:
-                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-                S3_BUCKET: $S3_BUCKET
-                LOCAL_PATH: "build"
-    - step: &deploy-app
-        name: Deploy Staging Application to AWS S3
-          deployment: stage
-          script:
-            - pipe: atlassian/aws-s3-deploy:1.1.0
-              variables:
-                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
-                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
-                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
-                S3_BUCKET: $S3_BUCKET
-                LOCAL_PATH: "build"
+        name: Deploy Application to AWS S3
+        script:
+          - pipe: atlassian/aws-s3-deploy:1.1.0
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+              S3_BUCKET: $S3_BUCKET
+              LOCAL_PATH: "build"
 
 
 pipelines:
