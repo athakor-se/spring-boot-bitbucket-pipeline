@@ -38,7 +38,7 @@ pipelines:
       - step:
           <<: *deploy-s3-app
           deployment: live
-    Deplot to Stage:
+    Deploy to Stage:
       - step: 
           *build-s3-app
       - step:
